@@ -30,7 +30,8 @@ def home():
 
     user = renderuser()
     genres = graphdb.getFavoriteTypes(session['iduser'])
-    films = graphdb.getFilms(genres)
+    favoriteFilms = graphdb.getFavoriteFilms(session['iduser'])
+    films = graphdb.getFilms(genres, favoriteFilms)
     return render_template("home.html",user=user, films=films)
 
 @app.route('/select')

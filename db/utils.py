@@ -1,6 +1,6 @@
 from rdflib import Graph
 from rdflib.plugins.stores.sparqlstore import SPARQLStore
-import functools
+import functools, random
 
 class filmGraph():
     
@@ -39,26 +39,26 @@ class filmGraph():
         self.graph.parse('appFilm/db/data.ttl')
         self.graph.close()
     
-    def getFilms(self, genres):
-        films = []
-
-        if len(genres) <= 1 :
-            limit = 10
-        elif len(genres) <= 3 :
-            limit = 5
-        else :
-            limit = 2
-        
+    def getFilms(self, genres, favoriteFilms):
+        genresFilms = []
+        random.shuffle(genres)
+        random.shuffle(favoriteFilms)
         for genre in genres:
-            request = filmGraph.GETFILMS.format(genre=genre,limit=limit)
-            result = self.dbpedia.query(request)
-            for film in result:
-                films.append({
-                    'uri': film['uri'],
-                    'title': film['title'],
-                    'description': film['description'],
-                    'genre': self.genres[genre]['name']
-                })
+            for film in favoriteFilms:
+                genresFilms.append((genre, film))
+
+        filmValues = functools.reduce(lambda f1, f2 : f'{f1} {f2}', map(lambda film: f'<{film}>',favoriteFilms))
+        notFilms = functools.reduce(lambda f1, f2 : f'{f1},{f2}', map(lambda film: f'<{film}>',favoriteFilms))
+        genreValues = functools.reduce(lambda f1, f2 : f'{f1} {f2}', map(lambda genre: f'<{genre}>',genres))
+        films = []
+        request = filmGraph.GETFILMS.format(films=filmValues, genres=genreValues, notfilms=notFilms, limit=20)
+        result = self.dbpedia.query(request)
+        for film in result:
+            films.append({
+                'uri': film['uri'],
+                'title': film['title'],
+                'description': film['description'],
+            })
         return films
 
     def getGenres(self):
@@ -129,6 +129,11 @@ class filmGraph():
         request = filmGraph.ADDFAVORITEFILM.format(userUri=userUri,favoriteFilmUri=filmUri)
         self.graph.update(request)
         self.save()
+    
+    def getFavoriteFilms(self, userUri):
+        request = filmGraph.GETFAVORITEFILMS.format(userUri=userUri)
+        result = self.graph.query(request)
+        return [f['uri']  for f in result]
 
     GETUSER = """
             PREFIX : <http://bda/tp2/paulmulard/>
@@ -154,12 +159,17 @@ class filmGraph():
     GETFILMS = """
         SELECT DISTINCT ?uri ?title ?description
         WHERE {{
-            ?uri a dbo:Film; 
+            VALUES ?genre {{{genres}}}
+            VALUES ?film {{{films}}}
+            VALUES ?class {{ dbo:Work dbo:Movie }}
+            ?uri a ?class; 
                 rdfs:label ?title;
                 dbo:abstract ?description;
-                dbo:wikiPageWikiLink <{genre}> .
+                dbo:wikiPageWikiLink ?genre;
+                dbo:wikiPageWikiLink ?film .
             FILTER (lang(?description) = 'fr')
             FILTER (lang(?title) = 'fr')
+            FILTER (?uri NOT IN ({notfilms}))
         }} 
         LIMIT {limit}
     """
@@ -229,8 +239,27 @@ class filmGraph():
 
     ADDFAVORITEFILM = """
         PREFIX : <http://bda/tp2/paulmulard/>
-        PREFIX : <http://bda/tp2/paulmulard/>
         INSERT DATA {{ 
             <{userUri}> :favoriteFilm <{favoriteFilmUri}> .
         }}
+    """
+
+    GETFAVORITEFILMS = """
+            PREFIX : <http://bda/tp2/paulmulard/>
+            SELECT ?uri
+            WHERE {{
+                <{userUri}> :favoriteFilm ?uri .
+            }}
+    """
+
+    SUBGETFILMS = """
+        {{
+        values
+        ?uri a dbo:Work|dbo:Movie; 
+            rdfs:label ?title;
+            dbo:abstract ?description;
+            dbo:wikiPageWikiLink <{genre}>;
+            dbo:wikiPageWikiLink <{film}> .
+        FILTER (lang(?description) = 'fr')
+        FILTER (lang(?title) = 'fr')}}
     """

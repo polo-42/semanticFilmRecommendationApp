@@ -5,11 +5,17 @@
 :PaulMulard a :User ;
     :favoriteFilm <http://dbpedia.org/resource/Cabin_Fever_(2002_film)>,
         <http://dbpedia.org/resource/Captain_America:_Civil_War>,
-        <http://dbpedia.org/resource/Prison_on_Fire> ;
-    :favoriteType <http://dbpedia.org/resource/Comedy_horror>,
-        <http://dbpedia.org/resource/Mockumentary>,
-        <http://dbpedia.org/resource/Prison_film>,
-        <http://dbpedia.org/resource/Splatter_film> ;
+        <http://dbpedia.org/resource/Dangal_(film)>,
+        <http://dbpedia.org/resource/Flash_Gordon_(film)>,
+        <http://dbpedia.org/resource/Marvel_Cinematic_Universe:_Phase_Three>,
+        <http://dbpedia.org/resource/Prison_on_Fire>,
+        <http://dbpedia.org/resource/Thor:_Love_and_Thunder>,
+        <http://dbpedia.org/resource/Thor:_Ragnarok>,
+        <http://dbpedia.org/resource/WandaVision>,
+        <http://dbpedia.org/resource/Your_Name> ;
+    :favoriteType <http://dbpedia.org/resource/Cult_film>,
+        <http://dbpedia.org/resource/Horror_film>,
+        <http://dbpedia.org/resource/Romance_film> ;
     foaf:firstName "Paul" ;
     foaf:lastName "Mulard" .
 
