@@ -51,7 +51,6 @@ class filmGraph():
         
         for genre in genres:
             request = filmGraph.GETFILMS.format(genre=genre,limit=limit)
-            print(request)
             result = self.dbpedia.query(request)
             for film in result:
                 films.append({
@@ -110,13 +109,19 @@ class filmGraph():
             map(lambda genre : f'dbr:{genre}', genresUri)
         )
 
+        self.removeFavoriteTypes(userUri)
+
         request = filmGraph.ADDTYPES.format(userUri=userUri,favoriteTypes=favoriteTypes)
+        self.graph.update(request)
+        self.save()
+    
+    def removeFavoriteTypes(self, userUri):
+        request = filmGraph.DELETETYPES.format(userUri=userUri)
         self.graph.update(request)
         self.save()
     
     def getFavoriteTypes(self, userUri):
         request = filmGraph.GETTYPES.format(userUri=userUri)
-        print(request)
         result = self.graph.query(request)
         return [g['genre'] for g in result]
 
@@ -205,4 +210,14 @@ class filmGraph():
             WHERE {{
                 <{userUri}> :favoriteType ?genre .
             }}
+    """
+
+    DELETETYPES = """
+        PREFIX : <http://bda/tp2/paulmulard/>
+        DELETE {{
+            <{userUri}> :favoriteType ?genre .
+        }}
+        WHERE {{
+            <{userUri}> :favoriteType ?genre .
+        }}
     """

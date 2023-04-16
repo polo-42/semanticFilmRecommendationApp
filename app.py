@@ -33,7 +33,16 @@ def home():
 @app.route('/select')
 def select():
     user = renderuser()
+
+    typesSelected = [g.split("/")[-1] for g in graphdb.getFavoriteTypes(session['iduser'])]
     genres = graphdb.getGenres()
+    for genre in genres :
+        if genre['uri'] in typesSelected:
+            genre['selected'] = True
+        else :
+            genre['selected'] = False
+    
+
     return render_template("select.html",user=user, genres=genres)
 
 @app.route('/more')

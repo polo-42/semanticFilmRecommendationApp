@@ -20,7 +20,11 @@
 {% block content %}
 <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group"></div>
     {% for genre in genres %}
-    <input class="btn-check" type="checkbox" value="" id={{genre.uri}}>
+    <input class="btn-check" type="checkbox" id={{genre.uri}}
+    {% if genre.selected == true %}
+        checked
+    {% endif %}
+    >    
     <label class="btn btn-outline-primary m-2" for={{genre.uri}}>
         {{genre.name}}
     </label>

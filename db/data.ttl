@@ -3,12 +3,10 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 :PaulMulard a :User ;
-    :favoriteType <http://dbpedia.org/resource/Apocalyptic_and_post-apocalyptic_fiction>,
-        <http://dbpedia.org/resource/Comedy_horror>,
+    :favoriteType <http://dbpedia.org/resource/Comedy_horror>,
         <http://dbpedia.org/resource/Mockumentary>,
         <http://dbpedia.org/resource/Prison_film>,
-        <http://dbpedia.org/resource/Splatter_film>,
-        <http://dbpedia.org/resource/Zombie_film> ;
+        <http://dbpedia.org/resource/Splatter_film> ;
     foaf:firstName "Paul" ;
     foaf:lastName "Mulard" .
 
