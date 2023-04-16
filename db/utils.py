@@ -15,7 +15,7 @@ class filmGraph():
         request = filmGraph.GETCATEGORIES
         result = self.dbpedia.query(request)
         self.genres = {
-            genre['uri'].split("/")[-1]: {
+            genre['uri']: {
                 'uri': genre['uri'].split("/")[-1], 
                 'name': genre['label']
             } for genre in result 
@@ -144,10 +144,10 @@ class filmGraph():
     GETFILMS = """
         SELECT DISTINCT ?uri ?title ?description
         WHERE {{
-            ?uri a dbo:Film;
+            ?uri a dbo:Film; 
                 rdfs:label ?title;
                 dbo:abstract ?description;
-                dbo:wikiPageWikiLink dbr:{genre} .
+                dbo:wikiPageWikiLink <{genre}> .
             FILTER (lang(?description) = 'fr')
             FILTER (lang(?title) = 'fr')
         }} 
