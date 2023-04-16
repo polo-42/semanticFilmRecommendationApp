@@ -3,12 +3,17 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 :PaulMulard a :User ;
+    :favoriteFilm <http://dbpedia.org/resource/Cabin_Fever_(2002_film)>,
+        <http://dbpedia.org/resource/Captain_America:_Civil_War>,
+        <http://dbpedia.org/resource/Prison_on_Fire> ;
     :favoriteType <http://dbpedia.org/resource/Comedy_horror>,
         <http://dbpedia.org/resource/Mockumentary>,
         <http://dbpedia.org/resource/Prison_film>,
         <http://dbpedia.org/resource/Splatter_film> ;
     foaf:firstName "Paul" ;
     foaf:lastName "Mulard" .
+
+:favoriteFilm rdfs:domain :User .
 
 :favoriteType rdfs:domain :User .
 

@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
+from flask_cors import CORS, cross_origin
 from db.utils import filmGraph
 import json
 
 app = Flask(__name__)
+CORS(app)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 graphdb = filmGraph()
 
@@ -12,6 +14,7 @@ def index():
 
 @app.route("/home", methods=['GET','POST'])
 def home():
+    redirectIfNotConnected()
     if request.method == 'POST':
         session['firstname'] = request.form['firstname']
         session['lastname'] = request.form['lastname']
@@ -32,6 +35,7 @@ def home():
 
 @app.route('/select')
 def select():
+    redirectIfNotConnected()
     user = renderuser()
 
     typesSelected = [g.split("/")[-1] for g in graphdb.getFavoriteTypes(session['iduser'])]
@@ -47,6 +51,7 @@ def select():
 
 @app.route('/more')
 def more():
+    redirectIfNotConnected()
     if "film" in request.args:
         film = graphdb.getMoreInformations(request.args['film'])
         return render_template('filmInformations.html',film=film)
@@ -58,6 +63,19 @@ def renderuser():
         'firstname': session['firstname'] if 'firstname' in session else 'John',
         'lastname': session['lastname'] if 'lastname' in session else 'Doe'
     }
+
+
+@app.route("/addFavoriteFilm", methods=['POST'])
+@cross_origin()
+def addFavoriteFilm():
+    if request.method == 'POST':
+        graphdb.addFavoriteFilm(session['iduser'], request.json['uri'])
+        return 'added', 202
+    return 'invalid request', 405
+
+def redirectIfNotConnected():
+    if 'iduser' not in session: 
+        return redirect("/")
     
 
 if __name__=='__main__':

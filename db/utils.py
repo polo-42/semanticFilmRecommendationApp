@@ -125,6 +125,11 @@ class filmGraph():
         result = self.graph.query(request)
         return [g['genre'] for g in result]
 
+    def addFavoriteFilm(self, userUri, filmUri):
+        request = filmGraph.ADDFAVORITEFILM.format(userUri=userUri,favoriteFilmUri=filmUri)
+        self.graph.update(request)
+        self.save()
+
     GETUSER = """
             PREFIX : <http://bda/tp2/paulmulard/>
             PREFIX foaf: <http://xmlns.com/foaf/0.1/>
@@ -219,5 +224,13 @@ class filmGraph():
         }}
         WHERE {{
             <{userUri}> :favoriteType ?genre .
+        }}
+    """
+
+    ADDFAVORITEFILM = """
+        PREFIX : <http://bda/tp2/paulmulard/>
+        PREFIX : <http://bda/tp2/paulmulard/>
+        INSERT DATA {{ 
+            <{userUri}> :favoriteFilm <{favoriteFilmUri}> .
         }}
     """

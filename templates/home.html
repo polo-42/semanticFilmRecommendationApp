@@ -1,12 +1,17 @@
 {% extends "base.html" %}
+{% from 'macros.html' import heartCheckBox, beforeHeartBoxRendering %}
 
 {% block title %} Page principale {% endblock %}
 
 {% block content %}
+    {{ beforeHeartBoxRendering() }}
     {% for film in films %}
         <div class="card w-50 my-5">
             <div class="card-body">
-            <h5 class="card-title">{{film.title}}</h5>
+            <div class="row">   
+                <h5 class="card-title">{{film.title}}</h5>
+                {{ heartCheckBox(film.uri) }}
+            </div>
             <h6 class="card-subtitle mb-2 text-body-secondary">{{film.genre}}</h6>
             <p class="card-text">{{film.description}}.</p>
             <a href="/more?film={{film.uri}}" class="btn btn-primary">Plus d'informations</a>
