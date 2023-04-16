@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} Page principale {% endblock %}
+
+
+{% block homelink %}
+<script>
+    function makeUrl() {
+        genres = JSON.stringify(Array.from(document.getElementsByTagName("input"))
+            .filter(element => element.checked)
+            .map(element => element.id.toString()));
+        document.getElementById("homeLink").href = "/home?genres="+genres;
+    }
+</script>
+<li class="nav-item">
+    <a id="homeLink" class="nav-link active" aria-current="page" onclick="makeUrl()" href="#">Accueil</a>
+</li>
+{% endblock %}
+
+{% block content %}
+<div class="btn-group" role="group" aria-label="Basic checkbox toggle button group"></div>
+    {% for genre in genres %}
+    <input class="btn-check" type="checkbox" value="" id={{genre.uri}}>
+    <label class="btn btn-outline-primary m-2" for={{genre.uri}}>
+        {{genre.name}}
+    </label>
+    {% endfor %}
+</div>
+{% endblock %}
+

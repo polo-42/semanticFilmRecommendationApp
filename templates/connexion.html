@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %} Page de connexion {% endblock %}
+
+{% block content %}
+<div class="container">
+    <form action="/home" method="post" class="mx-auto my-4 h-25 w-25">
+        <div class="mb-3">
+          <label for="firstname" class="form-label">Prénom</label>
+          <input name="firstname" type="text" class="form-control" id="firstname">
+        </div>
+        <div class="mb-3">
+          <label for="lastname" class="form-label">Nom</label>
+          <input name="lastname" type="text" class="form-control" id="lastname">
+        </div>
+        <button type="submit" class="btn btn-primary">Se connecter</button>
+      </form>
+</div>
+{% endblock %}
