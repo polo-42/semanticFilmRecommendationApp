@@ -10,7 +10,7 @@
             <div class="card-body">
             <div class="row">   
                 <h5 class="card-title">{{film.title}}</h5>
-                {{ heartCheckBox(film.uri) }}
+                {{ heartCheckBox(film.uri, user.id) }}
             </div>
             <h6 class="card-subtitle mb-2 text-body-secondary">{{film.genre}}</h6>
             <p class="card-text">{{film.description}}.</p>

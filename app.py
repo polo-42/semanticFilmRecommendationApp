@@ -22,16 +22,19 @@ def home():
         if not graphdb.isExisting(user):
             user['id'] = (user['firstname']+user['lastname']).replace(' ','')
             graphdb.createUser(user)
-
-        session['iduser'] = graphdb.getUserId(user)
+ 
+    
     
     if "genres" in request.args:
         graphdb.addFavoriteTypes(session['iduser'], json.loads(request.args['genres']))
 
     user = renderuser()
+    user['id'] = graphdb.getUserId(user)
+    session['iduser'] = user['id']
     genres = graphdb.getFavoriteTypes(session['iduser'])
     favoriteFilms = graphdb.getFavoriteFilms(session['iduser'])
     films = graphdb.getFilms(genres, favoriteFilms)
+    print('hello')
     return render_template("home.html",user=user, films=films)
 
 @app.route('/select')
@@ -69,8 +72,9 @@ def renderuser():
 @app.route("/addFavoriteFilm", methods=['POST'])
 @cross_origin()
 def addFavoriteFilm():
+    redirectIfNotConnected()
     if request.method == 'POST':
-        graphdb.addFavoriteFilm(session['iduser'], request.json['uri'])
+        graphdb.addFavoriteFilm(request.json['iduser'], request.json['uri'])
         return 'added', 202
     return 'invalid request', 405
 

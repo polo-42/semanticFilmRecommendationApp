@@ -22,12 +22,16 @@
       }
 </style>
 <script>
-    function activeHeart(id){
+    function activeHeart(id, iduser){
         let icon = document.getElementById(id);
+
         icon.classList.toggle('active');
-        fetch('http://localhost:5000/addFavoriteFilm',{
+        fetch(`http://localhost:5000/addFavoriteFilm`,{
             method: 'POST',
-            body: JSON.stringify({uri: id}),
+            body: JSON.stringify({
+              iduser: iduser,
+              uri: id
+            }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
               }
@@ -37,9 +41,9 @@
     }
 </script>
 {% endmacro %}
-{% macro heartCheckBox(id) %}
+{% macro heartCheckBox(id, iduser) %}
 <div class='large-font text-center'>
-    <ion-icon id="{{id}}" name="heart" onclick="activeHeart('{{id}}')">
+    <ion-icon id="{{id}}" name="heart" onclick="activeHeart('{{id}}','{{iduser}}')">
         <div class='bg-primary'></div>
     </ion-icon>
 </div>

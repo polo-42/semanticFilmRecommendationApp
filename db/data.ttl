@@ -2,6 +2,20 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
+:BobLebricoleur a :User ;
+    :favoriteFilm <http://dbpedia.org/resource/Casualty_(TV_series)>,
+        <http://dbpedia.org/resource/Premam_(2016_film)> ;
+    :favoriteType <http://dbpedia.org/resource/Coming-of-age_story>,
+        <http://dbpedia.org/resource/Medical_drama>,
+        <http://dbpedia.org/resource/Postmodernist_film> ;
+    foaf:firstName "Bob" ;
+    foaf:lastName "Le bricoleur" .
+
+:EstherLayat a :User ;
+    :favoriteType <http://dbpedia.org/resource/Horror_film> ;
+    foaf:firstName "Esther" ;
+    foaf:lastName "Layat" .
+
 :PaulMulard a :User ;
     :favoriteFilm <http://dbpedia.org/resource/Cabin_Fever_(2002_film)>,
         <http://dbpedia.org/resource/Captain_America:_Civil_War>,
@@ -13,9 +27,7 @@
         <http://dbpedia.org/resource/Thor:_Ragnarok>,
         <http://dbpedia.org/resource/WandaVision>,
         <http://dbpedia.org/resource/Your_Name> ;
-    :favoriteType <http://dbpedia.org/resource/Cult_film>,
-        <http://dbpedia.org/resource/Horror_film>,
-        <http://dbpedia.org/resource/Romance_film> ;
+    :favoriteType <http://dbpedia.org/resource/Action_film> ;
     foaf:firstName "Paul" ;
     foaf:lastName "Mulard" .
 

@@ -46,12 +46,16 @@ class filmGraph():
         for genre in genres:
             for film in favoriteFilms:
                 genresFilms.append((genre, film))
+        
+        if len(favoriteFilms) == 0 and len(genres) == 0:
+            return []
 
-        filmValues = functools.reduce(lambda f1, f2 : f'{f1} {f2}', map(lambda film: f'<{film}>',favoriteFilms))
-        notFilms = functools.reduce(lambda f1, f2 : f'{f1},{f2}', map(lambda film: f'<{film}>',favoriteFilms))
-        genreValues = functools.reduce(lambda f1, f2 : f'{f1} {f2}', map(lambda genre: f'<{genre}>',genres))
+        filmValues = functools.reduce(lambda f1, f2 : f'{f1} {f2}', map(lambda film: f'<{film}>',favoriteFilms),'VALUES ?film {')+' }' if len(favoriteFilms) > 0 else ''
+        notFilms = functools.reduce(lambda f1, f2 : f'{f1},{f2}', map(lambda film: f'<{film}>',favoriteFilms)) if len(favoriteFilms) > 1 else ''
+        genreValues = functools.reduce(lambda f1, f2 : f'{f1} {f2}', map(lambda genre: f'<{genre}>',genres),'VALUES ?genre {')+' }' if len(genres) > 0 else ''
         films = []
         request = filmGraph.GETFILMS.format(films=filmValues, genres=genreValues, notfilms=notFilms, limit=20)
+        print(request)
         result = self.dbpedia.query(request)
         for film in result:
             films.append({
@@ -159,8 +163,8 @@ class filmGraph():
     GETFILMS = """
         SELECT DISTINCT ?uri ?title ?description
         WHERE {{
-            VALUES ?genre {{{genres}}}
-            VALUES ?film {{{films}}}
+            {genres}
+            {films}
             VALUES ?class {{ dbo:Work dbo:Movie }}
             ?uri a ?class; 
                 rdfs:label ?title;
